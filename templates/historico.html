@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+{% if sucesso %}
+    <div class="alert alert-success d-flex align-items-center fs-5 p-3 mb-4" role="alert">
+        <span class="me-2" aria-hidden="true">✅</span>
+        <div><strong>SUCCESS:</strong> Operação realizada com sucesso!</div>
+    </div>
+{% endif %}
+
+<div class="card shadow-sm p-4 mb-4">
+    <h1 class="h3">{{ beneficiario.nome }}</h1>
+    <p class="mb-1"><strong>CPF:</strong> {{ beneficiario.cpf }} | <strong>Data Nasc.:</strong> {{ beneficiario.data_nascimento }}</p>
+    <p class="mb-0"><strong>Endereço:</strong> {{ beneficiario.endereco }}</p>
+</div>
+
+<div class="card shadow-sm p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">📋 Histórico de Atendimentos</h2>
+        <button class="btn btn-primary btn-lg min-target" data-bs-toggle="modal" data-bs-target="#modalAtendimento">+ NOVO ATENDIMENTO</button>
+    </div>
+    
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Tipo de Auxílio</th>
+                <th scope="col">Observação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in atendimentos %}
+                <tr>
+                    <td>{{ a.data_atendimento.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td><span class="badge bg-primary fs-6">{{ a.tipo_auxilio }}</span></td>
+                    <td>{{ a.observacao or 'Sem observações.' }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Nenhum atendimento registrado até o momento.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Novo Atendimento -->
+<div class="modal fade" id="modalAtendimento" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/registrar-atendimento" method="POST">
+                <input type="hidden" name="beneficiario_id" value="{{ beneficiario.id }}">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Registrar Novo Atendimento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="tipo_auxilio" class="form-label fw-bold">Tipo de Auxílio *</label>
+                        <select class="form-select form-select-lg" id="tipo_auxilio" name="tipo_auxilio" required>
+                            <option value="Cesta Básica Completa">Cesta Básica Completa</option>
+                            <option value="Apoio Social / Orientação">Apoio Social / Orientação</option>
+                            <option value="Encaminhamento Clínico">Encaminhamento Clínico</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observacao" class="form-label fw-bold">Observações</label>
+                        <textarea class="form-control" id="observacao" name="observacao" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary min-target">Confirmar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
