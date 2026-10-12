@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card shadow-sm p-4 mb-4">
+    <h2 class="h4 mb-3">🔍 Busca Rápida de Beneficiários</h2>
+    <form action="/busca-cadastro" method="GET" class="row g-2">
+        <div class="col-md-9">
+            <label for="busca" class="visually-hidden">Digite CPF ou Nome</label>
+            <input type="text" class="form-control form-control-lg" id="busca" name="busca" value="{{ busca or '' }}" placeholder="Digite o Nome ou CPF (ex: 123.456.789-00)">
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary btn-lg w-100 min-target">BUSCAR CIDADÃO</button>
+        </div>
+    </form>
+    
+    {% if resultados %}
+        <div class="list-group mt-3">
+            {% for b in resultados %}
+                <a href="/historico/{{ b.id }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
+                    <div>
+                        <strong class="fs-5">{{ b.nome }}</strong>
+                        <div class="text-muted">CPF: {{ b.cpf }}</div>
+                    </div>
+                    <span class="btn btn-outline-primary btn-sm">Ver Ficha</span>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="card shadow-sm p-4">
+    <h2 class="h4 mb-3">📝 Cadastro Único - Novo Cidadão</h2>
+    <form action="/cadastrar-beneficiario" method="POST">
+        <div class="mb-3">
+            <label for="nome" class="form-label fw-bold">Nome Completo *</label>
+            <input type="text" class="form-control form-control-lg" id="nome" name="nome" required>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="cpf" class="form-label fw-bold">CPF * (Somente números)</label>
+                <input type="text" class="form-control form-control-lg" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="data_nascimento" class="form-label fw-bold">Data de Nascimento *</label>
+                <input type="date" class="form-control form-control-lg" id="data_nascimento" name="data_nascimento" required>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="endereco" class="form-label fw-bold">Endereço Completo *</label>
+            <input type="text" class="form-control form-control-lg" id="endereco" name="endereco" required>
+        </div>
+        <button type="submit" class="btn btn-success btn-lg min-target">SALVAR CADASTRO</button>
+    </form>
+</div>
+{% endblock %}
