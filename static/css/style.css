@@ -1,0 +1,22 @@
+/* Área de toque mnima de 48px para acessibilidade móvel (RNF04) */
+.min-target, .form-control-lg, .btn-lg {
+    min-height: 48px;
+    min-width: 48px;
+}
+
+/* Indicador visual de foco visível por teclado */
+*:focus-visible {
+    outline: 3px solid #0d6efd !important;
+    outline-offset: 2px !important;
+}
+
+/* Garante contraste mínimo de 4.5:1 */
+body {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.alert-success {
+    background-color: #198754 !important;
+    color: #ffffff !important;
+}
